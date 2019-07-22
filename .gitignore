@@ -1,0 +1,15 @@
+#VSCode Setting
+.vscode/
+.vs
+
+
+#Build files
+misc/
+build/
+*.exe
+*.lnk
+
+#Assets
+data/
+
+#Misc
