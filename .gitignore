@@ -11,4 +11,5 @@ build/
 #Assets
 data/
 
-#Misc
+#Profile data
+profile/

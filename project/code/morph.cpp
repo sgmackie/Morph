@@ -53,13 +53,7 @@ int main(int argc, char *argv[])
         {
             case CROSS_FADE:
             {
-                for(u64 j = 0; j < OutputCount; ++j)
-                {
-                    f32 Sample      = 0.0f;
-                    Sample          = Sources.Data[i+1][j] * Parameter + Sources.Data[i][j] * (1 -Parameter);
-                    Sample          *= OutputAmplitude;
-                    OutputBuffer[j] = Sample;
-                }
+                DSPCrossfade(OutputBuffer, OutputCount, &Sources, i, OutputAmplitude, Parameter);
 
                 break;            
             }

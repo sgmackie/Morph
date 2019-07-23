@@ -87,3 +87,5 @@ typedef struct WAV_FILES
 #include "wav.cpp"
 #include "file.cpp"
 #include "source.cpp"
+#include "dsp.cpp"
+

@@ -134,3 +134,4 @@ bool ParseDirectories(const char *PathA, const char *PathB, MORPH_SOURCES *Sourc
     // Fully parsed
     return true;
 }
+
