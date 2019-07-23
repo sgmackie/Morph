@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     u8 InputFX                  = atoi(argv[5]);
     f32 Parameter               = atof(argv[6]);
     f32 OutputAmplitude         = atof(argv[7]);
-    
+
     // Set WAV and Source databases
     MORPH_SOURCES Sources = {};
     WAV_FILES WAVs = {};
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
         // Write output file
         char Path[512];
-        snprintf(Path, 512, "%s\\Output_AB_Crossfade_%zu.wav", DirectoryOutput, FileTracker);
+        snprintf(Path, 512, "%s//Output_AB_Crossfade_%zu.wav", DirectoryOutput, FileTracker);
         WriteOutputToWAV(Path, OutputBuffer, OutputCount, 2, 192000, 32);
 
         // Cleanup

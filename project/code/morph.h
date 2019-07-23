@@ -6,13 +6,16 @@
 #include <assert.h>
 
 // TODO: This is a linux portover - replace with native win32 code?
-#include "dirent.h"
+#if _WIN32
+    #include "dirent.h"
+    #include "winsock.h"
+#else
+    #include <arpa/inet.h>
+    #include <dirent.h>
+#endif
 
 // Custom
 #include "types.h"
-
-//TODO: Make this portable - replace htonl
-#include "winsock.h"
 
 // Maxes
 #define MAX_WAV_FILE_SIZE       ((192000 * 2) * 300)

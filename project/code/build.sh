@@ -24,13 +24,32 @@ pushd ${BuildDir} > /dev/null
 PlatformFiles="${CurDir}/${Platform}.cpp"
 
 # Set compiler flags:
-CompilerFlags="-g -gcodeview -pedantic"
+if [ $1 -eq 1 ]
+then
+    echo "gcc"
+    CompilerFlags="-g -pedantic"
+else
+    echo "Clang"
+    CompilerFlags="-g -gcodeview -pedantic"    
+fi
 
 # Set warning labels:
-CommonWarnings="-Wall -Werror"
+if [ $1 -eq 1 ]
+then
+    CommonWarnings="-Wall -Werror -Wno-error=multichar -Wno-error=unused-result"
+else
+    CommonWarnings="-Wall -Werror -Wno-four-char-constants"
+fi
 
 # Set Compiler optimsation level
-CompilerOpt="-O0"
+if [ $2 -eq 1 ]
+then
+    echo "Optimised Build"
+    CompilerOpt="-O3 -march=native"    
+else
+    echo "Debug Build"
+    CompilerOpt="-O0"
+fi
 
 # Set logging flags
 LogFlags=""
@@ -41,8 +60,14 @@ ProfileFlags=""
 # Set Linux libraries
 Libs="-lm"
 
-# Run Clang compiler
-clang++ ${CompilerFlags} ${CommonWarnings} ${CompilerOpt} ${LogFlags} ${ProfileFlags} ${Libs} ${PlatformFiles} -o ${Platform}
+# Run compiler
+# Set warning labels:
+if [ $1 -eq 1 ]
+then
+    g++ ${CompilerFlags} ${CommonWarnings} ${CompilerOpt} ${LogFlags} ${ProfileFlags} ${Libs} ${PlatformFiles} -o ${Platform}
+else
+    clang++-8 ${CompilerFlags} ${CommonWarnings} ${CompilerOpt} ${LogFlags} ${ProfileFlags} ${Libs} ${PlatformFiles} -o ${Platform}
+fi
 
 # Exit
 popd > /dev/null

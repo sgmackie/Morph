@@ -58,7 +58,7 @@ bool ParseDirectories(const char *PathA, const char *PathB, MORPH_SOURCES *Sourc
     // Temp string buffers
     char FullPathA[512];
     char FullPathB[512];
-	const char *Slash = "\\";
+	const char *Slash = "//";
 
     // Open paths and check they match
     DIR *DirectoryA = opendir(PathA);
@@ -97,9 +97,9 @@ bool ParseDirectories(const char *PathA, const char *PathB, MORPH_SOURCES *Sourc
         // Directory A route
         // Concatenate strings to build the full file path
         memset(FullPathA, 0, sizeof(*FullPathA)); // Reset buffer for each loop
-        strcat_s(FullPathA, PathA);
-        strcat_s(FullPathA, Slash);
-        strcat_s(FullPathA, DirectoryAParser->d_name);
+        strcat(FullPathA, PathA);
+        strcat(FullPathA, Slash);
+        strcat(FullPathA, DirectoryAParser->d_name);
 
         // Load into databases
         LoadWAVIntoSource(FullPathA, Sources, WAVs);
@@ -107,9 +107,9 @@ bool ParseDirectories(const char *PathA, const char *PathB, MORPH_SOURCES *Sourc
         // Directory B route
         // Concatenate strings to build the full file path
         memset(FullPathB, 0, sizeof(*FullPathB)); // Reset buffer for each loop
-        strcat_s(FullPathB, PathB);
-        strcat_s(FullPathB, Slash);
-        strcat_s(FullPathB, DirectoryBParser->d_name);
+        strcat(FullPathB, PathB);
+        strcat(FullPathB, Slash);
+        strcat(FullPathB, DirectoryBParser->d_name);
 
         // Load into databases
         LoadWAVIntoSource(FullPathB, Sources, WAVs);
@@ -117,7 +117,8 @@ bool ParseDirectories(const char *PathA, const char *PathB, MORPH_SOURCES *Sourc
         // Check if we've reached the cutoff point
         if(Sources->Count == (Cutoff * 2))
         {
-            printf("Morph: Cutoff reached - not reading past this point %zu\n", Cutoff);
+            // TODO: Better printf with compiler flags for verbosity settings (check previous logging functions)
+            // printf("Morph: Cutoff reached - not reading past this point %zu\n", Cutoff);
 			
 			// Close the path
 			closedir(DirectoryA);

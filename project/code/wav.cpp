@@ -12,8 +12,10 @@ void LoadWAVIntoSource(const char *Path, MORPH_SOURCES *Sources, WAV_FILES *WAVF
     // Open file
     // memcpy((char *) WAVFiles->Path[Index], Path, sizeof(*Path));
     WAVFiles->Path[Index] = Path;
-    FILE *File;
-    if(fopen_s(&File, WAVFiles->Path[Index], "rb") != 0) 
+    FILE *File = 0;
+    File = fopen(WAVFiles->Path[Index], "r");
+    //TODO: If the output directory doesn't exist then this will fail - mkdir? Complain to user?
+    if(!File) 
     {
         printf("Morph: Failed to open file %s\n", WAVFiles->Path[Index]);
         return;
@@ -53,8 +55,8 @@ void LoadWAVIntoSource(const char *Path, MORPH_SOURCES *Sources, WAV_FILES *WAVF
             Sources->Data[Index] = (f32 *) malloc(sizeof(f32) * Sources->TotalSampleLength[Index]);
 
             // Copy sample data
-            u64 SamplesRead = 0;
-            SamplesRead = fread(Sources->Data[Index] , sizeof(f32), Sources->TotalSampleLength[Index], File);
+            fread(Sources->Data[Index] , sizeof(f32), Sources->TotalSampleLength[Index], File);
+            
         }
 		else
 		{
@@ -121,9 +123,10 @@ void Write2Bytes(u32 Value, u8 **Array)
 void WriteOutputToWAV(const char *Path, f32 *OutputBuffer, u64 SampleCount, u16 Channels = DEFAULT_CHANNELS, u32 SampleRate = DEFAULT_SAMPLE_RATE, u16 BitsPerSample = DEFAULT_BIT_RATE)
 {    
     // Open file
-    FILE *File;
+    FILE *File = 0;
+    File = fopen(Path, "wb");
     //TODO: If the output directory doesn't exist then this will fail - mkdir? Complain to user?
-    if(fopen_s(&File, Path, "wb") != 0) 
+    if(!File) 
     {
         printf("Morph: Failed to open file %s\n", Path);
         return;
