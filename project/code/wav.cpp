@@ -22,6 +22,7 @@ void LoadWAVIntoSource(const char *Path, MORPH_SOURCES *Sources, WAV_FILES *WAVF
     }   
 
     // Read header - check chunks
+    // TODO: This can fail! Might only read 1 byte, really check all possible WAV header sizes
     size_t BytesReturned = fread(&WAVFiles->Header[Index], sizeof(WAV_HEADER), 1, File);
     assert(BytesReturned > 0);
     assert(WAVFiles->Header[Index].ChunkID      == htonl(0x52494646)); // "RIFF"
@@ -29,6 +30,7 @@ void LoadWAVIntoSource(const char *Path, MORPH_SOURCES *Sources, WAV_FILES *WAVF
     assert(WAVFiles->Header[Index].Subchunk1ID  == htonl(0x666d7420)); // "fmt "
 
     // Seek to "data" chunk
+    // TODO: This can get stuck in an infinite loop!
     while(WAVFiles->Header[Index].Subchunk2ID   != htonl(0x64617461)) // "data"
     {
         fseek(File, 4, SEEK_CUR);
@@ -75,6 +77,9 @@ void LoadWAVIntoSource(const char *Path, MORPH_SOURCES *Sources, WAV_FILES *WAVF
     Sources->Count++;
     WAVFiles->ID[Index]     = Sources->Count;
     Sources->WAVID[Index]   = WAVFiles->ID[Index];
+
+    // TODO: Verbosity control
+    // printf("Morph: Source %zu = %s\n", (Sources->Count - 1), WAVFiles->Path[Index]);
 
     // Close File
     fclose(File);

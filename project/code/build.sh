@@ -20,6 +20,9 @@ fi
 # Move to build directory
 pushd ${BuildDir} > /dev/null
 
+# Delete everything in the folder
+rm -f ./*
+
 # Set compiler arguments
 PlatformFiles="${CurDir}/${Platform}.cpp"
 

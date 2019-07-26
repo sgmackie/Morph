@@ -35,39 +35,51 @@ int main(int argc, char *argv[])
     ResizeBuffers(&Sources);
 
     // Process
-    // Find largest sample length
-    //TODO: Add option for markers later
-    size_t FileTracker = 0;
-    for(size_t i = 0; i < Sources.Count; i += 2)
+    // Get FX type
+    switch(InputFX)
     {
-        // Used for output file numbering
-        ++FileTracker;
-        //TODO: What's better: alloc and free for every loop or one huge alloc and a memset every loop? 
-        u64 OutputCount = MAX(Sources.TotalSampleLength[i], Sources.TotalSampleLength[i+1]);
-
-        // Allocate output
-        f32 *OutputBuffer = (f32 *) malloc(sizeof(f32) * OutputCount);
-
-        // Get FX type
-        switch(InputFX)
+        case CROSS_FADE:
         {
-            case CROSS_FADE:
+            //TODO: Add option for A-B markers
+            // Find largest sample count
+            u64 MaxOutputCount = 0;
+            for(size_t i = 0; i < Sources.Count; ++i)
             {
+                MaxOutputCount = MAX(Sources.TotalSampleLength[i], MaxOutputCount);
+            }
+
+            // Allocate output
+            f32 *OutputBuffer = (f32 *) malloc(sizeof(f32) * MaxOutputCount);
+
+            // Used for output file numbering
+            size_t FileTracker = 0;
+            for(size_t i = 0; i < Sources.Count; i += 2)
+            {
+                ++FileTracker;
+                
+                // Get the output count
+                u64 OutputCount = MAX(Sources.TotalSampleLength[i], Sources.TotalSampleLength[i+1]);
+
+                // Reset output buffer
+                memset(OutputBuffer, 0, (sizeof(f32) * OutputCount));
+
+                // DSP 
                 DSPCrossfade(OutputBuffer, OutputCount, &Sources, i, OutputAmplitude, Parameter);
 
-                break;            
-            }
+                // Write output file
+                char Path[512];
+                snprintf(Path, 512, "%s//Output_AB_Crossfade_%zu.wav", DirectoryOutput, FileTracker);
+                WriteOutputToWAV(Path, OutputBuffer, OutputCount, 2, 192000, 32);
+            }            
+
+            // Cleanup
+            free(OutputBuffer);
+
+            break;            
         }
+    }    
 
-        // Write output file
-        char Path[512];
-        snprintf(Path, 512, "%s//Output_AB_Crossfade_%zu.wav", DirectoryOutput, FileTracker);
-        WriteOutputToWAV(Path, OutputBuffer, OutputCount, 2, 192000, 32);
-
-        // Cleanup
-        free(OutputBuffer);
-    }
-
+    // Free data
     UnloadWAVFromSource(&Sources, &WAVs);
 
     return 0;

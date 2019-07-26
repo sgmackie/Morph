@@ -1,4 +1,4 @@
-echo Benchmark (1 - 10)
+echo Benchmark (4 - 50)
 
 @echo off
 
@@ -6,22 +6,22 @@ echo Benchmark (1 - 10)
 pushd ..\build\win32
 
 :: Create benchmark paths
-set Output1="I:\Projects\Current\Programming\Morph\project\data\Output_1"
-set Output5="I:\Projects\Current\Programming\Morph\project\data\Output_5"
-set Output10="I:\Projects\Current\Programming\Morph\project\data\Output_10"
+set Output4="I:\Projects\Current\Programming\Morph\project\data\Output_4"
+set Output25="I:\Projects\Current\Programming\Morph\project\data\Output_25"
+set Output50="I:\Projects\Current\Programming\Morph\project\data\Output_50"
 
 :: Create build path if it doesn't exist
-if not exist %Output1% mkdir %Output1%
-if not exist %Output5% mkdir %Output5%
-if not exist %Output10% mkdir %Output10%
+if not exist %Output4% mkdir %Output4%
+if not exist %Output25% mkdir %Output25%
+if not exist %Output50% mkdir %Output50%
 
-:: 1 Morph
-morph.exe I:\Projects\Current\Programming\Morph\project\data\BOOM_Bird I:\Projects\Current\Programming\Morph\project\data\BOOM_Tiger 1 %Output1% 1 0.5 0.9
+:: 4 Morph
+::morph.exe I:\Projects\Current\Programming\Morph\project\data\BOOM_A I:\Projects\Current\Programming\Morph\project\data\BOOM_B 4 %Output4% 1 0.5 0.9
 
-:: 5 Morph
-morph.exe I:\Projects\Current\Programming\Morph\project\data\BOOM_Bird I:\Projects\Current\Programming\Morph\project\data\BOOM_Tiger 5 %Output5% 1 0.5 0.9
+:: 25 Morph
+::morph.exe I:\Projects\Current\Programming\Morph\project\data\BOOM_A I:\Projects\Current\Programming\Morph\project\data\BOOM_B 25 %Output25% 1 0.5 0.9
 
-:: 10 Morph
-morph.exe I:\Projects\Current\Programming\Morph\project\data\BOOM_Bird I:\Projects\Current\Programming\Morph\project\data\BOOM_Tiger 10 %Output10% 1 0.5 0.9
+:: 50 Morph
+morph.exe I:\Projects\Current\Programming\Morph\project\data\BOOM_A I:\Projects\Current\Programming\Morph\project\data\BOOM_B 50 %Output50% 1 0.5 0.9
 
 popd

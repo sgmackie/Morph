@@ -25,7 +25,7 @@ if not exist %ObjDir% mkdir %ObjDir%
 set CompilerFlags=-g -gcodeview -pedantic
 
 :: Set warning labels:
-set CommonWarnings=-Wall -Werror -Wno-four-char-constants
+set CommonWarnings=-Wall -Werror -Wno-four-char-constants -Wno-deprecated-declarations
 
 :: Set Compiler optimsation level
 set CompilerOpt=-O0
@@ -45,4 +45,4 @@ clang %CompilerFlags% %CommonWarnings% %CompilerOpt% %LogFlags% %ProfileFlags% %
 :: Exit
 popd
 
-REM I:\Projects\Current\Programming\Morph\project\data\BOOM_Bird I:\Projects\Current\Programming\Morph\project\data\BOOM_Tiger 3 I:\Projects\Current\Programming\Morph\project\data\Output 1 0.5 0.9
+REM I:\Projects\Current\Programming\Morph\project\data\BOOM_A I:\Projects\Current\Programming\Morph\project\data\BOOM_B 4 I:\Projects\Current\Programming\Morph\project\data\Output 1 0.5 0.9

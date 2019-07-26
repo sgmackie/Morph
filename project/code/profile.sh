@@ -10,7 +10,7 @@ set -e
 
 # Set profile output directory
 Version="$4"
-ProfileDir="../profile/${Version}"
+ProfileDir="../profile/${Version}_$1"
 
 # Make directory if it doesn't exist
 if [ ! -d "${ProfileDir}" ]; then
@@ -19,39 +19,39 @@ fi
 
 # Bash Timer
 # Have to call from the benchmark script itself
-./benchmark.sh $1 "time -p -o time_${Version}.txt"
+./benchmark.sh $1 "time -p -o time_${Version}_$1.txt"
 
 # System call tracer
-./benchmark.sh $1 "strace -c -o trace_${Version}.txt"
+./benchmark.sh $1 "strace -c -o trace_${Version}_$1.txt"
 
 # Performance counters
-./benchmark.sh $1 "perf stat -c -d -B -o stat_${Version}.txt"
+./benchmark.sh $1 "perf stat -c -d -B -o stat_${Version}_$1.txt"
 
 # Profiler
-./benchmark.sh $1 "sudo perf record -g -d -s -T -P -o perf_${Version}"
+./benchmark.sh $1 "sudo perf record -g -d -s -T -P -o perf_${Version}_$1"
 
 # GUI output
 if [ $2 -eq 1 ]
 then
     pushd ../build/linux
-    hotspot perf_${Version}
+    hotspot perf_${Version}_$1
     popd
 fi
 
 # Memory checking
-./benchmark.sh $1 "valgrind --track-origins=yes --time-stamp=yes --log-file=memory_${Version}.txt"
+./benchmark.sh $1 "valgrind --track-origins=yes --time-stamp=yes --log-file=memory_${Version}_$1.txt"
 
 # Chache misses
-./benchmark.sh $1 "valgrind -q --tool=cachegrind --trace-children=yes --branch-sim=yes --cachegrind-out-file=cache_${Version}.out"
+./benchmark.sh $1 "valgrind -q --tool=cachegrind --trace-children=yes --branch-sim=yes --cachegrind-out-file=cache_${Version}_$1.out"
 pushd ../build/linux
 
 # Annotate data
-cg_annotate cache_${Version}.out /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/morph.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/wav.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/file.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/source.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/dsp.cpp --auto=yes > cache_report_${Version}.txt
+cg_annotate cache_${Version}_$1.out /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/morph.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/wav.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/file.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/source.cpp /mnt/FC663B45663AFFC6/Projects/Current/Programming/Morph/project/code/dsp.cpp --auto=yes > cache_report_${Version}_$1.txt
 
 # GUI output
 if [ $3 -eq 1 ]
 then
-    kcachegrind cache_${Version}.out 
+    kcachegrind cache_${Version}_$1.out 
 fi
 popd
 

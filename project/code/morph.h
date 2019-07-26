@@ -21,7 +21,7 @@
 #define MAX_WAV_FILE_SIZE       ((192000 * 2) * 300)
 //TODO: Check this on win/mac/linux 
 #define MAX_PATH_SIZE           260
-#define MAX_SOURCES             64 // Always double the intended amount
+#define MAX_SOURCES             128 // Always double the intended amount
 
 // Defaults
 #define DEFAULT_CHANNELS        2
