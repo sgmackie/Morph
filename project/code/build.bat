@@ -25,7 +25,7 @@ if not exist %ObjDir% mkdir %ObjDir%
 set CompilerFlags=-g -gcodeview -pedantic
 
 :: Set warning labels:
-set CommonWarnings=-Wall -Werror -Wno-four-char-constants -Wno-deprecated-declarations
+set CommonWarnings=-Wall -Werror -Wno-four-char-constants -Wno-deprecated-declarations -Wno-vla-extension
 
 :: Set Compiler optimsation level
 set CompilerOpt=-O0

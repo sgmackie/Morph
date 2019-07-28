@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <string.h> //memset
 #include <assert.h>
+#include <math.h>
+
+// External
+#define MEOW_FFT_IMPLEMENTATION
+#include "meow_fft.h"
 
 // TODO: This is a linux portover - replace with native win32 code?
 #if _WIN32
@@ -16,6 +21,48 @@
 
 // Custom
 #include "types.h"
+
+#define PI64 3.14159265358979323846
+
+bool IsPowerOf2(uintptr_t x) 
+{
+	return (x & (x-1)) == 0;
+}
+
+//Assertion with logging
+static bool AssertQuit = true;
+static i64 AssertFailuresCounter = 0;
+
+//! Add logger
+#define Assert(Expression, ...) do {                            \
+  if(!(Expression))                                             \
+  {                                                             \
+    ++AssertFailuresCounter;                                    \
+    printf("%s, %d", __FILE__, __LINE__);                       \
+    if(AssertQuit)                                              \
+    {                                                           \
+        abort();                                                \
+    }                                                           \
+  }                                                             \
+} while(0);                                                     \
+
+u64 LowerPowerOf2U64(u64 A)
+{
+    u64 v = A; 
+
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v |= v >> 32;
+    v++;
+
+    u64 x = v >> 1;
+
+    return x;
+}
 
 // Maxes
 #define MAX_WAV_FILE_SIZE       ((192000 * 2) * 300)
@@ -37,6 +84,7 @@ typedef enum MORPH_TYPE
 {
     CROSS_FADE = 1,
     CROSS_SYNTHESIS = 2,
+    STFT = 3,
 } MORPH_TYPE; 
 
 typedef struct WAV_HEADER 
